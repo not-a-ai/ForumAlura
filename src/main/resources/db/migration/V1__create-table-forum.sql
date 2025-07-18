@@ -1,0 +1,45 @@
+CREATE TABLE perfil (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO perfil (nome) VALUES ('MODERADOR');
+INSERT INTO perfil (nome) VALUES ('ALUNO');
+
+CREATE TABLE usuarios (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    perfil_id BIGINT,
+    FOREIGN KEY (perfil_id) REFERENCES perfil(id)
+);
+
+CREATE TABLE curso (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    categoria VARCHAR(100)
+);
+
+CREATE TABLE topico (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    mensagem TEXT NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) DEFAULT 'NAO_RESPONDIDO',
+    autor_id BIGINT NOT NULL,
+    curso_id BIGINT NOT NULL,
+    FOREIGN KEY (autor_id) REFERENCES usuarios(id),
+    FOREIGN KEY (curso_id) REFERENCES curso(id)
+);
+
+CREATE TABLE resposta (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    mensagem TEXT NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    topico_id BIGINT NOT NULL,
+    autor_id BIGINT NOT NULL,
+    solucao BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (topico_id) REFERENCES topico(id),
+    FOREIGN KEY (autor_id) REFERENCES usuarios(id)
+);
